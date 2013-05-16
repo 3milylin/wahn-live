@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  4sqr_id: MyString
+  name: MyString
+  category: MyString
+  herenow: 1
+  lat: 9.99
+  lng: 9.99
+
+two:
+  4sqr_id: MyString
+  name: MyString
+  category: MyString
+  herenow: 1
+  lat: 9.99
+  lng: 9.99

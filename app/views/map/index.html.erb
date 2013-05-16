@@ -1,0 +1,75 @@
+<div id="map"></div>
+	
+	
+<div class="overlay info">
+	<div class="wrapper">
+		
+		<h1>We Are Here Now</h1>
+		<h2>Live NYC</h2>
+		
+		<div id="content">3 wolf moon thundercats veniam, next level dolor freegan 8-bit. Ethnic seitan whatever, cillum bicycle rights brunch banjo neutra ad craft beer ethical consectetur. Vegan meggings consequat anim fap adipisicing. Sunt duis cardigan Austin
+		</div>
+		
+		<div id="footer">
+		Last updated <b id="minSinceUpdate">###</b> min. ago
+		</div>
+		
+	</div>
+</div> 
+	
+	
+<script>
+        //initiate leaflet map
+      var map = new L.Map('map', { 
+        center: [40.7542, -73.9600],
+        zoom: 11
+      })
+
+      L.tileLayer('http://{s}.tiles.mapbox.com/v2/sw2279.NYCLotto/{z}/{x}/{y}.png', {
+        attribution: 'MapBox'
+      }).addTo(map);
+  
+  
+      
+  $.getJSON('/api/venues.json', function(data) {
+
+
+
+
+        for (var i in data) {
+        	if (data[i].herenow > 0) { 
+        		var latlng = new L.LatLng(data[i].lat,data[i].lng);
+		        var marker = new L.CircleMarker(latlng, {
+		        		radius: 5 + data[i].herenow / 2 ,
+		        		opacity: 0.8,
+		        		fillOpacity:0.7,
+		        		weight: 0,
+		        		fillColor: catCol(data[i].category)
+		        	});
+		        marker.bindPopup(data[i].name + "(" + data[i].herenow + ")");
+		        marker.addTo(map);
+            }
+        }
+
+  });
+      
+  var catCol = function(val){ 
+	  if (val == "arts_entertainment") return "#4BAD65";
+	  if (val == "education") return "#4B70AD";
+	  if (val == "food") return "#D6C333";
+	  if (val == "building") return "#C29191";
+	  if (val == "nightlife") return "#B47ABF";
+	  if (val == "residences") return "#BF9D7A";
+	  if (val == "parks_outdoors") return "#61CC4B";
+	  if (val == "shops") return "#D692C2";
+	  if (val == "travel") return "#76B1B3";
+	  return "#7A8787";
+  }
+      
+      $('.button').click(function(){
+		  $('.button').removeClass('selected');
+		  $(this).addClass('selected');	
+		  LayerActions[$(this).attr('id')]();
+		});
+		
+</script>

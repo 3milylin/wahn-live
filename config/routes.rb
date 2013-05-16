@@ -1,4 +1,11 @@
 WahnLive::Application.routes.draw do
+  
+  scope "api" do
+  	resources :venues
+  end
+  
+  root :to => "map#index"
+
   # The priority is based upon order of creation:
   # first created -> highest priority.
 

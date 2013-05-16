@@ -4,4 +4,4 @@
 # If you change this key, all old signed cookies will become invalid!
 # Make sure the secret is at least 30 characters and all random,
 # no regular words or you'll be exposed to dictionary attacks.
-WahnLive::Application.config.secret_token = '739837553bf9676dc196b8a3b706955ab8e656c0c43e7480de7cbbab355a3ae312d6457a1d679f25d6371e459c44de9a10c172c98793d656d9545832fd414ebc'
+WahnLive::Application.config.secret_token = '200a3e6ec6adda6ecbe4e529d2634c406ccb3357d2ce1577614092cb672594381f4acac4da9519c07296e40f256c383a181a66bbf8a50accc667c022f090a58d'
