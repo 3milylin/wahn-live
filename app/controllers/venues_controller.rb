@@ -41,9 +41,9 @@ class VenuesController < ApplicationController
 			@@name = venue["name"]
 			@@herenow = venue["hereNow"]["count"]
 			
-			if venue["categories"]
-				categoryLink = venue["categories"]["icon"]["prefix"]
-				test = category.split("/")
+			if venue["categories"].count > 0
+				categoryLink = venue["categories"][0]["icon"]["prefix"].to_s
+				test = categoryLink.split("/")
 				logger.info(test[5])
 				@@category = test[5] 
 			end
