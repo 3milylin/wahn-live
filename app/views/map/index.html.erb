@@ -7,11 +7,11 @@
 		<h1>We Are Here Now</h1>
 		<h2>Live NYC</h2>
 		
-		<div id="content">3 wolf moon thundercats veniam, next level dolor freegan 8-bit. Ethnic seitan whatever, cillum bicycle rights brunch banjo neutra ad craft beer ethical consectetur. Vegan meggings consequat anim fap adipisicing. Sunt duis cardigan Austin
+		<div id="content">People are checked into <b><%= @venues.count %></b> foursquare venues.
 		</div>
 		
 		<div id="footer">
-		Last updated <b id="minSinceUpdate">###</b> min. ago
+		Last updated @ <b id="minSinceUpdate"><%=@venues.first.updated_at%></b>
 		</div>
 		
 	</div>
