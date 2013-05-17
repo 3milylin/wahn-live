@@ -71,7 +71,7 @@ class VenuesController < ApplicationController
 			
 			
 		end 
-		sleep(.015)
+		sleep 0.015
 	end 
 
 
