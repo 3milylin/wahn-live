@@ -11,3 +11,7 @@
  *= require_self
  *= require_tree .
  */
+ 
+ .live-marker { 
+ 	stroke-width: 2px;
+ } 

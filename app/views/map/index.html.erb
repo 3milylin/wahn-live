@@ -31,40 +31,79 @@
   
   
       
-  $.getJSON('/api/venues.json', function(data) {
-
-
-
+  	  $.getJSON('/api/venues.json', function(data) {
 
         for (var i in data) {
-        	if (data[i].herenow > 0) { 
         		var latlng = new L.LatLng(data[i].lat,data[i].lng);
 		        var marker = new L.CircleMarker(latlng, {
-		        		radius: 5 + data[i].herenow / 2 ,
+		        		title: data[i].name,
+		        		radius: calcRadius(data[i].herenow),
 		        		opacity: 0.8,
 		        		fillOpacity:0.7,
 		        		weight: 0,
 		        		fillColor: catCol(data[i].category)
 		        	});
-		        marker.bindPopup(data[i].name + "(" + data[i].herenow + ")");
+		        	
+		        	marker.name = data[i].name;
+		        	marker.herenow = data[i].herenow;
+		        	marker.category = fullCat(data[i].category);
+		        	
+		        	marker.on('mouseover', function(evt) {
+					  //evt.target is the marker that is being moused over 
+					  console.log(evt.target);
+					  evt.target.options.fillColor="#FFFFFF"; 
+					  evt.target.bindPopup("<b>Name</b>: " + evt.target.options.title + "<br><b>Category</b>: " + evt.target.category + "<br><B>Here Now</b>: " + evt.target.herenow).openPopup();
+					});
+					
+		        	marker.on('mouseleave', function(evt) {
+					  //evt.target is the marker that is being moused over 
+					  //bindPopup() does not need to be called here if it was already called
+					  //somewhere else for this marker.
+					  console.log("mouse left");
+					  //evt.target
+					});
+
 		        marker.addTo(map);
-            }
+		        console.log(marker);
         }
 
-  });
+  	  });
+  	  
+  	  $(".leaflet-clickble").addClass("live-marker");
       
   var catCol = function(val){ 
-	  if (val == "arts_entertainment") return "#4BAD65";
-	  if (val == "education") return "#4B70AD";
-	  if (val == "food") return "#D6C333";
-	  if (val == "building") return "#C29191";
-	  if (val == "nightlife") return "#B47ABF";
-	  if (val == "residences") return "#BF9D7A";
-	  if (val == "parks_outdoors") return "#61CC4B";
-	  if (val == "shops") return "#D692C2";
-	  if (val == "travel") return "#76B1B3";
+	  if (val == "arts_entertainment") return "#1BDDE0";
+	  if (val == "education") return "#ED9261";
+	  if (val == "food") return "#EDDD61";
+	  if (val == "building") return "#9DAEB3";
+	  if (val == "nightlife") return "#7F4CED";
+	  if (val == "residences") return "#ED5C4C";
+	  if (val == "parks_outdoors") return "#48DB5C";
+	  if (val == "shops") return "#ED6195";
+	  if (val == "travel") return "#6182ED";
 	  return "#7A8787";
   }
+  
+  var fullCat = function(val) { 
+	  if (val == "arts_entertainment") return "Arts & Entertainment";
+	  if (val == "education") return "Education";
+	  if (val == "food") return "Food";
+	  if (val == "building") return "Building";
+	  if (val == "nightlife") return "Nightlife";
+	  if (val == "residences") return "Residencies";
+	  if (val == "parks_outdoors") return "Park & Outdoors";
+	  if (val == "shops") return "Shops";
+	  if (val == "travel") return "Travel";
+	  return "";
+  }
+  
+  var calcRadius = function(val){ 
+  	if (val < 10) return val *3; 
+  	if (val < 50) return val * 2; 
+  	if (val < 100) return val / 2; 
+  	if (val < 150) return val / 3; 
+  	return 30;
+  } 
       
       $('.button').click(function(){
 		  $('.button').removeClass('selected');

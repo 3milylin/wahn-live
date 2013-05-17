@@ -4,6 +4,8 @@ WahnLive::Application.routes.draw do
   	resources :venues
   end
   
+  match 'venues/update' => 'venues#update_data'
+  
   root :to => "map#index"
 
   # The priority is based upon order of creation:
