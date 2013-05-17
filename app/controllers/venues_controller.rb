@@ -42,10 +42,10 @@ class VenuesController < ApplicationController
 			@@herenow = venue["hereNow"]["count"]
 			
 			if venue["categories"]
-				categoryLink = venue["categories"]
-				logger.info(categoryLink)
-				# .first["icon"]["prefix"].split("/")
-				@@category = "test" 
+				categoryLink = venue["categories"]["icon"]["prefix"]
+				test = category.split("/")
+				logger.info(test[5])
+				@@category = test[5] 
 			end
 			
 			# if the venue already exists in the database 
