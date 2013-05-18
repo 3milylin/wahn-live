@@ -45,7 +45,6 @@ class VenuesController < ApplicationController
 			if venue["categories"].count > 0
 				categoryLink = venue["categories"][0]["icon"]["prefix"].to_s
 				test = categoryLink.split("/")
-				logger.info(test[5])
 				@@category = test[5] 
 			end
 			
@@ -53,10 +52,12 @@ class VenuesController < ApplicationController
 			if Venue.find_by_foursqr_id(@@id) 
 				@@v = Venue.find_by_foursqr_id(@@id)
 				if @@v.herenow == @@herenow  
-					# do nothing 
+					# do nothing
+					logger.info("venue exists, no change") 
 				else 
 					# update venue
 					@@v.update_attributes(:herenow => @@herenow.to_i)
+					logger.info(@@v.id.to_s + "'s herenow count was updated")
 				end 
 			else 
 				Venue.create(
@@ -67,6 +68,8 @@ class VenuesController < ApplicationController
 					:herenow => @@herenow, 
 					:category => @@category
 					)
+				logger.info("New venue was created")
+				logger.info("\t" + @@id.to_s + "\t" + @@herenow.to_s)
 			end 
 			
 			
