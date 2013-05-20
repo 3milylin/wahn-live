@@ -26,55 +26,57 @@ class VenuesController < ApplicationController
 	# loop through all points 
 	Point.all.each do |point| 
 	
-		@@request = @@BASE_URL + Point.all.first.lat.to_s + "," + Point.all.first.lng.to_s + "&limit=" + @@MAX_NUMBER + "&client_id=" + @@client_id[point.id%20] + "&client_secret=" + @@client_secret[point.id%20]
+		@@request = @@BASE_URL + point.lat.to_s + "," + point.lng.to_s + "&limit=" + @@MAX_NUMBER + "&client_id=" + @@client_id[point.id%20] + "&client_secret=" + @@client_secret[point.id%20]
 
 		logger.info(@@request) 
 
-		@parsed = JSON.parse(open(@@request).read)
+		if(JSON.parse(open(@@request).read))
+			@parsed = JSON.parse(open(@@request).read)
 		
-		@result = @parsed["response"]["venues"]
+			@result = @parsed["response"]["venues"]
 
-		@result.each do |venue| 
+			@result.each do |venue| 
 		
-			@@id = venue["id"] 
-			@@lat = venue["location"]["lat"].to_s
-			@@lng = venue["location"]["lng"].to_s
-			@@name = venue["name"]
-			@@herenow = venue["hereNow"]["count"]
+				@@id = venue["id"] 
+				@@lat = venue["location"]["lat"].to_s
+				@@lng = venue["location"]["lng"].to_s
+				@@name = venue["name"]
+				@@herenow = venue["hereNow"]["count"]
 			
-			if venue["categories"].count > 0
-				categoryLink = venue["categories"][0]["icon"]["prefix"].to_s
-				test = categoryLink.split("/")
-				@@category = test[5] 
-			end
+				if venue["categories"].count > 0
+					categoryLink = venue["categories"][0]["icon"]["prefix"].to_s
+					test = categoryLink.split("/")
+					@@category = test[5] 
+				end
 			
-			# if the venue already exists in the database 
-			if Venue.find_by_foursqr_id(@@id) 
-				@@v = Venue.find_by_foursqr_id(@@id)
-				if @@v.herenow == @@herenow  
-					# do nothing
-					logger.info("venue exists, no change") 
+				# if the venue already exists in the database 
+				if Venue.find_by_foursqr_id(@@id) 
+					@@v = Venue.find_by_foursqr_id(@@id)
+					if @@v.herenow == @@herenow  
+						# do nothing
+						logger.info("venue exists, no change") 
+					else 
+						# update venue
+						@@v.update_attributes(:herenow => @@herenow.to_i)
+						logger.info(@@v.id.to_s + "'s herenow count was updated")
+					end 
 				else 
-					# update venue
-					@@v.update_attributes(:herenow => @@herenow.to_i)
-					logger.info(@@v.id.to_s + "'s herenow count was updated")
+					Venue.create(
+						:foursqr_id => @@id,  
+						:name => @@name, 
+						:lat => @@lat,
+						:lng => @@lng,
+						:herenow => @@herenow, 
+						:category => @@category
+						)
+					logger.info("New venue was created")
+					logger.info("\t" + @@id.to_s + "\t" + @@herenow.to_s)
 				end 
-			else 
-				Venue.create(
-					:foursqr_id => @@id,  
-					:name => @@name, 
-					:lat => @@lat,
-					:lng => @@lng,
-					:herenow => @@herenow, 
-					:category => @@category
-					)
-				logger.info("New venue was created")
-				logger.info("\t" + @@id.to_s + "\t" + @@herenow.to_s)
+			
+			
 			end 
-			
-			
 		end 
-		sleep 0.015
+		sleep 0.3
 	end 
 
 
